@@ -4,11 +4,9 @@ import os
 
 app = Flask(__name__)
 
-# Получаем токен из переменной окружения
-TOKEN = os.getenv("TELEGRAM_TOKEN")
+TOKEN = os.environ.get("TELEGRAM_TOKEN")
 API_URL = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 
-# Обработка входящих сообщений от Telegram
 @app.route("/", methods=["POST"])
 def webhook():
     data = request.get_json()
@@ -23,13 +21,12 @@ def webhook():
                 "text": f"Шерлок получил: {text}"
             })
 
-    return "ok"
+    return {"ok": True}
 
-# Проверка, что бот запущен
 @app.route("/", methods=["GET"])
 def index():
     return "Шерлок-бот работает."
 
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
