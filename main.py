@@ -23,13 +23,13 @@ def webhook():
 # Проверка доступности
 @app.route('/', methods=['GET'])
 def index():
-    return 'Sherlock-бог жив.', 200
+    return "Sherlock-бот жив.", 200
 
 # Установка webhook
 if __name__ == "__main__":
-    url = os.environ.get('RAILWAY_STATIC_URL') or os.environ.get('WEBHOOK_URL')  # можно вручную задать
+    url = os.environ.get('RAILWAY_STATIC_URL') or os.environ.get('WEBHOOK_URL')
     full_url = f'{url}/{TOKEN}'
     bot.remove_webhook()
     bot.set_webhook(url=full_url)
-    print(f'Webhook установлен на: {full_url}')
+    print(f"Webhook установлен на: {full_url}")
     app.run(host='0.0.0.0', port=8080)
