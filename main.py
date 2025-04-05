@@ -26,7 +26,7 @@ def index():
     return 'Sherlock-бог жив.', 200
 
 # Установка webhook
-if name == '__main__':
+if __name__ == "__main__":
     url = os.environ.get('RAILWAY_STATIC_URL') or os.environ.get('WEBHOOK_URL')  # можно вручную задать
     full_url = f'{url}/{TOKEN}'
     bot.remove_webhook()
