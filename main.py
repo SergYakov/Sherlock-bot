@@ -2,6 +2,7 @@ import os
 import telebot
 from flask import Flask, request
 import openai
+import traceback
 
 # Получаем переменные окружения
 TOKEN = os.environ.get("TELEGRAM_TOKEN")
@@ -23,10 +24,11 @@ def handle_message(message):
                 {"role": "user", "content": message.text}
             ]
         )
-        reply = response["choices"][0]["message"]["content"].strip()
+        reply = response.choices[0].message["content"].strip()
         bot.send_message(message.chat.id, reply)
     except Exception as e:
-        bot.send_message(message.chat.id, "Что-то пошло не так. Но я рядом.")
+        error_text = traceback.format_exc()
+        bot.send_message(message.chat.id, f"Ошибка:\n{error_text}")
 
 # Webhook от Telegram
 @app.route("/webhook", methods=["POST"])
@@ -43,7 +45,7 @@ def index():
 
 # Установка webhook при запуске
 if __name__ == "__main__":
-    full_url = f"https://{WEBHOOK_URL}/webhook"
+    full_url = f"{WEBHOOK_URL}/webhook"
     bot.remove_webhook()
     bot.set_webhook(url=full_url)
     print(f"Webhook установлен: {full_url}")
